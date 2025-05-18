@@ -17,7 +17,9 @@ export default function Navbar() {
         return () => {
             document.removeEventListener('mousedown', handleClickOutside);
         };
-    }, []);    return (
+    }, []);
+
+    return (
         <nav className="w-full h-16 bg-[#4B2E2B] border-b border-[#D97706]/30 relative z-50">
             <div className="h-full flex items-center px-4 max-w-7xl mx-auto relative">
                 {/* Logo/Home Link centered */}
@@ -30,8 +32,24 @@ export default function Navbar() {
                     </h1>
                 </div>
 
-                {/* Hamburger Menu at far right */}
-                <div className="ml-auto relative" ref={menuRef}>
+                {/* Desktop Navigation - Right aligned */}
+                <div className="hidden md:flex ml-auto space-x-4">
+                    <button
+                        onClick={() => navigate('/stash')}
+                        className="px-4 py-2 text-[#D97706] font-medieval hover:bg-[#D97706]/10 rounded-lg transition-colors"
+                    >
+                        Stash
+                    </button>
+                    <button
+                        onClick={() => navigate('/treasury-log')}
+                        className="px-4 py-2 text-[#D97706] font-medieval hover:bg-[#D97706]/10 rounded-lg transition-colors"
+                    >
+                        Treasury Log
+                    </button>
+                </div>
+
+                {/* Mobile Hamburger Menu */}
+                <div className="md:hidden ml-auto relative" ref={menuRef}>
                     <button
                         className="text-[#D97706] hover:text-[#D97706]/80 transition-colors p-2 rounded-lg hover:bg-[#D97706]/10"
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -46,7 +64,7 @@ export default function Navbar() {
                         </svg>
                     </button>
 
-                    {/* Dropdown Menu */}
+                    {/* Mobile Dropdown Menu */}
                     {isMenuOpen && (
                         <div className="absolute right-0 mt-2 w-48 rounded-lg shadow-lg bg-[#4B2E2B] border border-[#D97706]/30 overflow-hidden transition-all duration-200 ease-in-out">
                             <div className="py-1">

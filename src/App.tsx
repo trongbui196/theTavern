@@ -1,27 +1,63 @@
 import { useState } from 'react';
 import './index.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route,useLocation } from 'react-router-dom';
 import { supabase } from './supabase/supabase';
 import Home from './pages/Home';
-import Login from './components/authen/Loginform';
+import Login from './pages/Auth';
 import Stash from './pages/Stash';
-import Navbar from './components/common/Navbar';
 import Layout from './components/layout/MainLayout';
 import Treasury from './pages/Treasury';
-function App() {
+import ProtectedRoute from './components/auth/ProtectedRoute';
+
+function AppContent() {
+  const location = useLocation();
+  const isAuthPage = location.pathname === '/auth';
+
   return (
     <>
-      <Router>
-       <Layout>
+      {isAuthPage ? (
         <Routes>
-          <Route path="/" element={<Home />} />
           <Route path="/auth" element={<Login />} />
-          <Route path="/stash" element={<Stash />} />
-          <Route path="/treasury-log" element={<Treasury />} />
         </Routes>
+      ) : (
+        <Layout>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <ProtectedRoute>
+                  <Home />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/stash"
+              element={
+                <ProtectedRoute>
+                  <Stash />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/treasury-log"
+              element={
+                <ProtectedRoute>
+                  <Treasury />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
         </Layout>
-      </Router>
+      )}
     </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
+    </Router>
   );
 }
 

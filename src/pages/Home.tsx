@@ -5,9 +5,17 @@ import PerformanceHistory from "../components/dashboard//perfhis";
 import FinanceSummary from "../components/dashboard/FinanceSummary";
 import FinanceChart from "../components/dashboard/FinanceChart";
 import FinanceFlow from "../components/dashboard/FinanceFlow";
+import { supabase } from "../supabase/supabase";
+import { fetchCryptoAssetHoldings } from "../Fetching/Fetching";
 export default function Home() {
   const [activeTable, setActiveTable] = useState('assets');
-
+  const   handleUpdatePrice=async()=>{
+    const holdings = await fetchCryptoAssetHoldings();
+    const data = await getDataDashboard();
+    console.log(data)
+    console.log(holdings);
+    }
+  
   return (
     <div className="min-h-screen bg-[#4B2E2B]/35">
      
@@ -21,7 +29,7 @@ export default function Home() {
               placeholder="24,500"
             />
           </div>
-          <button 
+          <button onClick={handleUpdatePrice}
             className="bg-[#4B2E2B] text-[#D97706] px-4 py-1 rounded border border-[#D97706]/30 
                      hover:bg-[#D97706]/10 transition-colors duration-200 flex items-center gap-2 font-medieval"
           >

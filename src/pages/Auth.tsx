@@ -1,9 +1,10 @@
 import { Navigate } from 'react-router-dom';
-import { supabase } from './../../supabase/supabase';
+import { supabase } from '../supabase/supabase';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { loginWithEmail } from '../components/auth/authen';
 
-const LoginForm = () => {
+const Login = () => {
     const [backgroundImage, setBackgroundImage] = useState('');
     const [img2, setImg2] = useState('');
     const navigate = useNavigate();
@@ -11,21 +12,25 @@ const LoginForm = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
-    const handleLogin = async (username: string, password: string) => {
-        
-            navigate('/');
-        
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+          const user = await loginWithEmail(username, password);
+          console.log('Logged in user:', user);
+          // Navigate or fetch profile after login
+          navigate("/");
+        } catch (err) {
+         console.log('error bruh')
+        }
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault(); // Prevent default form submission
-        await handleLogin(username, password);
-    };
+    
 
     useEffect(() => {
         const fetchImages = async () => {
             try {
                 // Start timing when fetching begins
+                
                 const startTime = Date.now();
 
                 const [bgImg, img2] = await Promise.all([
@@ -39,7 +44,7 @@ const LoginForm = () => {
                 // Calculate how long the loading has taken
                 const loadingTime = Date.now() - startTime;
                 // If loading took less than 2000ms, wait for the remaining time
-                const remainingTime = Math.max(0, 1500 - loadingTime);
+                const remainingTime = Math.max(0, 500 - loadingTime);
 
                 await new Promise(resolve => setTimeout(resolve, remainingTime));
             } catch (error) {
@@ -121,4 +126,4 @@ shadow-[inset_0_0_6px_#3b1d0f] border border-amber-950"
     );
 };
 
-export default LoginForm;
+export default Login;
